@@ -25,23 +25,34 @@ public class VendaService {
 
     @Transactional
     public Venda registrarVenda(Cliente cliente, List<ItemVenda> itens) {
+
         Venda venda = new Venda();
         venda.setCliente(cliente);
         venda.setData(LocalDateTime.now());
 
         double valorTotal = 0;
+
         for (ItemVenda item : itens) {
             Produto produto = produtoRepository.findById(item.getProduto().getId())
                     .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
+            //Validação de estoque
             if (produto.getQuantidade() < item.getQuantidade()) {
                 throw new RuntimeException("Quantidade insuficiente");
-            } else {
-                produto.setQuantidade(produto.getQuantidade() - item.getQuantidade());
-                valorTotal += item.getSubtotal();
+            }
+            //Atualiza o estoque
+            produto.setQuantidade(produto.getQuantidade() - item.getQuantidade());
+            produtoRepository.save(produto);
+
+            //Cálculo do valor total da venda com base 100% no Banco de Dados
+            double subtotal = produto.getPreco() * item.getQuantidade();
+            item.setSubtotal(subtotal);
+            valorTotal += subtotal;
+
+            item.setVenda(venda);
+            item.setProduto(produto);
             }
 
-        }
         venda.setValorTotal(valorTotal);
         venda.setItens(itens);
         return vendaRepository.save(venda);
