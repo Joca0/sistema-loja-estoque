@@ -14,7 +14,11 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
     private LocalDateTime data;
 
     @Positive
@@ -25,10 +29,10 @@ public class Venda {
 
     //Construtor vazio para o Hibernate
     public Venda() {}
+
     //Construtor com todos os atributos
     public Venda(Long id, String cliente, LocalDateTime data, double valorTotal) {
         this.id = id;
-        this.cliente = cliente;
         this.data = data;
         this.valorTotal = valorTotal;
     }
@@ -41,12 +45,12 @@ public class Venda {
         this.id = id;
     }
 
-    public String getCliente() {
-        return cliente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public LocalDateTime getData() {

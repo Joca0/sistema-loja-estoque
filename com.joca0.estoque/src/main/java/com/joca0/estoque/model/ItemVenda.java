@@ -10,32 +10,24 @@ public class ItemVenda {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "produto_id")
     private Produto produto;
 
     @ManyToOne(optional = false)
     private Venda venda;
 
-    private int quantidade;
     private double subtotal;
+    private int quantidade;
 
     public ItemVenda() {}
-    public ItemVenda(Long id, Produto produto, Venda venda, int quantidade, double subtotal) {
+    public ItemVenda(Long id, Produto produto, Venda venda, int quantidade) {
         this.id = id;
         this.produto = produto;
         this.venda = venda;
         this.quantidade = quantidade;
-        this.subtotal = subtotal;
     }
 
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
-
-    public Long getId() {
+   public Long getId() {
         return id;
     }
 
@@ -65,5 +57,13 @@ public class ItemVenda {
 
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 }

@@ -23,8 +23,7 @@ public class ProdutoController {
 
     @GetMapping("/{id}")
     public Produto buscarPorId(@PathVariable Long id) {
-        return produtoService.buscarPorId(id)
-        .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        return produtoService.buscarPorId(id);
     }
 
     @PostMapping
