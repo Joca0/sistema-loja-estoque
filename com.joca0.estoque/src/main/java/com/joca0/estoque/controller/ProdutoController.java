@@ -2,12 +2,13 @@ package com.joca0.estoque.controller;
 
 import com.joca0.estoque.model.Produto;
 import com.joca0.estoque.service.ProdutoService;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/produto")
+@RequestMapping("/produtos")
 public class ProdutoController {
 
     private final ProdutoService produtoService;
@@ -17,8 +18,10 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public List<Produto> listarProdutos() {
-        return produtoService.listarProdutos();
+    public String listarProdutos(Model model) {
+        List<Produto> produtos = produtoService.listarProdutos();
+        model.addAttribute("produtos", produtos);
+        return "produtos/listaProdutos";
     }
 
     @GetMapping("/{id}")

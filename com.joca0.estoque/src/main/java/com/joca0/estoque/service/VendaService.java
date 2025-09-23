@@ -9,8 +9,11 @@ import com.joca0.estoque.repositories.VendaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VendaService {
@@ -86,5 +89,21 @@ public class VendaService {
         } else {
             throw new RuntimeException("Cliente não encontrado");
         }
+    }
+
+    public List<Venda> buscarUltimasVendas(int quantidade) {
+        return vendaRepository.findAll().stream()
+                .sorted(Comparator.comparing(Venda::getData).reversed())
+                .limit(quantidade)
+                .collect(Collectors.toList());
+    }
+
+    public double vendasDoDia() {
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.findByDataBetween(
+                hoje.atStartOfDay(), hoje.atTime(23, 59, 59)
+            ).stream()
+            .mapToDouble(Venda::getValorTotal)
+            .sum();
     }
 }

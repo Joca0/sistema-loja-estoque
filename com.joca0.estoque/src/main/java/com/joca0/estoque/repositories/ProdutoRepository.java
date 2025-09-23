@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> nome(String nome);
-
     List<Produto> id(Long id);
+    List<Produto> findByQuantidadeLessThan(int limite);
 }
