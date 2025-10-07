@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Sistema de Gerenciamento</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Sistema de Gerenciamento</h1>
+
+    <div class="menu-cards">
+        <div class="card">
+            <a th:href="@{/produtos}">
+                <div class="card-icon">📦</div>
+                <div>Gerenciar Produtos</div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a th:href="@{/clientes}">
+                <div class="card-icon">👥</div>
+                <div>Gerenciar Clientes</div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a th:href="@{/vendas}">
+                <div class="card-icon">💴</div>
+                <div>Gerenciar Vendas</div>
+            </a>
+        </div>
+
+        <div class="card">
+            <a th:href="@{/relatorios/vendas}">
+                <div class="card-icon">🧮</div>
+                <div>Relatórios</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Relatorios HOME -->
+    <div class="dashboard-section">
+        <h2>Resumo de Vendas</h2>
+        <div class="dashboard-cards">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${#numbers.formatCurrency(vendasHoje)}">R$ 0,00</div>
+                <div class="stat-label">Vendas Hoje</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${#numbers.formatCurrency(vendasSemana)}">R$ 0,00</div>
+                <div class="stat-label">Vendas na Semana</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Produtos com Estoque Baixo</h2>
+        <table class="mini-table">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="produto : ${produtosBaixoEstoque}">
+                    <td th:text="${produto.nome}">Nome do Produto</td>
+                    <td th:text="${produto.quantidade}">0</td>
+                    <td th:text="${#numbers.formatCurrency(produto.preco)}">R$ 0,00</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(produtosBaixoEstoque)}">
+                    <td colspan="3">Nenhum produto com estoque baixo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Últimas Vendas</h2>
+        <table class="mini-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="venda : ${ultimasVendas}">
+                    <td th:text="${#temporals.format(venda.data, 'dd/MM/yyyy HH:mm')}">01/01/2025</td>
+                    <td th:text="${venda.cliente != null ? venda.cliente.nome : 'Cliente não informado'}">Nome do Cliente</td>
+                    <td th:text="${#numbers.formatCurrency(venda.valorTotal)}">R$ 0,00</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(ultimasVendas)}">
+                    <td colspan="3">Nenhuma venda registrada</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        &copy; 2025 Sistema de Gerenciamento de Loja e Estoque (Projeto com interesse academico)
+    </footer>
+</div>
+    <!-- DevTools -->
+    <script>
+        document.write('<script src="//localhost:35729/livereload.js?snipver=1"></' + 'script>');
+    </script>
+</body>
+</html>

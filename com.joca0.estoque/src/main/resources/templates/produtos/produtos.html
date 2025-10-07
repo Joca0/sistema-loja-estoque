@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produtos - Sistema de Gerenciamento</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/produtos.css}">
+    <script th:href="@{js/produtos.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Sistema de Gerenciamento</h1>
+
+    <div class="itens-page">
+        <aside class="menu-lateral">
+            <div class="opcao">
+                <a th:href="@{/home}">
+                    <p>Voltar para o menu</p>
+                </a>
+            </div>
+            <div class="opcao">
+                <a href="#" onclick="showForm('add')">
+                    <p>Adicionar Produto</p>
+                </a>
+            </div>
+        </aside>
+
+        <section class="container-produtos">
+            <div id="lista-produtos">
+                <h2>Produtos em estoque</h2>
+                <table class="tabela-produtos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Produto</th>
+                            <th>Quantidade em estoque</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="produto : ${produtos}">
+                            <td th:text="${produto.id}"></td>
+                            <td th:text="${produto.nome}"></td>
+                            <td th:text="${produto.quantidade}"></td>
+                            <td th:text="${produto.categoria}"></td>
+                            <td th:text="${#numbers.formatCurrency(produto.preco)}"></td>
+                            <td>
+                                <button onclick="editarProduto(this.parentNode.parentNode)">Editar</button>
+                                <button onclick="deletarProduto(this.parentNode.parentNode.cells[0].innerText)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(produtos)}">
+                            <td colspan="6">Nenhum produto em estoque</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="form-produto" style="display: none;">
+                <h2 id="form-title">Adicionar Produto</h2>
+                <form id="produto-form">
+                    <input type="hidden" id="produto-id">
+                    <div class="form-group">
+                        <label for="produto-nome">Nome:</label>
+                        <input type="text" id="produto-nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="produto-categoria">Categoria:</label>
+                        <input type="text" id="produto-categoria" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="produto-preco">Preço:</label>
+                        <input type="number" id="produto-preco" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="produto-quantidade">Quantidade:</label>
+                        <input type="number" id="produto-quantidade" min="0" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" onclick="cancelarForm()">Cancelar</button>
+                        <button type="button" id="save-button" onclick="salvarProduto()">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>
