@@ -19,6 +19,11 @@ public class RelatorioController {
     @Autowired
     private RelatorioService relatorioService;
 
+    @GetMapping
+    public String paginaRelatorios() {
+        return "relatorios/relatorios";
+    }
+
     @GetMapping("/vendas")
     public String vendasPorPeriodo(@RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
                                    @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim,
@@ -26,6 +31,8 @@ public class RelatorioController {
 
         model.addAttribute("vendas", relatorioService.vendasPorPeriodo(inicio, fim));
         model.addAttribute("total", relatorioService.totalVendidoNoPeriodo(inicio, fim));
-        return "relatorios/vendas"; // thymeleaf
+        model.addAttribute("dataInicio", inicio);
+        model.addAttribute("dataFim", fim);
+        return "relatorios/vendas";
     }
 }

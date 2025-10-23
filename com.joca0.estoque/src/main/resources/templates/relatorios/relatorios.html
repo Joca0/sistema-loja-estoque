@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatórios - Sistema de Gerenciamento</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/main.css}">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/produtos.css}">
+    <script th:src="@{/js/relatorios.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Sistema de Gerenciamento</h1>
+
+    <div class="itens-page">
+        <aside class="menu-lateral">
+            <div class="opcao">
+                <a th:href="@{/home}">
+                    <p>Voltar para o menu</p>
+                </a>
+            </div>
+        </aside>
+
+        <section class="container-produtos">
+            <div id="relatorios-container">
+                <h2>Relatórios</h2>
+
+                <div class="relatorio-card">
+                    <h3>Relatório de Vendas por Período</h3>
+                    <form id="vendas-periodo-form" th:action="@{/relatorios/vendas}" method="get">
+                        <div class="form-group">
+                            <label for="inicio">Data Inicial:</label>
+                            <input type="date" id="inicio" name="inicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fim">Data Final:</label>
+                            <input type="date" id="fim" name="fim" required>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit">Gerar Relatório</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

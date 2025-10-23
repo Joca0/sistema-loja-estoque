@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Vendas - Sistema de Gerenciamento</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/main.css}">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/produtos.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Sistema de Gerenciamento</h1>
+
+    <div class="itens-page">
+        <aside class="menu-lateral">
+            <div class="opcao">
+                <a th:href="@{/relatorios}">
+                    <p>Voltar para Relatórios</p>
+                </a>
+            </div>
+            <div class="opcao">
+                <a th:href="@{/home}">
+                    <p>Voltar para o Menu</p>
+                </a>
+            </div>
+            <div class="opcao">
+                <a href="javascript:window.print()">
+                    <p>Imprimir Relatório</p>
+                </a>
+            </div>
+        </aside>
+
+        <section class="container-produtos">
+            <div id="relatorio-vendas">
+                <h2>Relatório de Vendas por Período</h2>
+
+                <div class="relatorio-info">
+                    <p><strong>Período:</strong> <span th:text="${#temporals.format(dataInicio, 'dd/MM/yyyy')}"></span> a <span th:text="${#temporals.format(dataFim, 'dd/MM/yyyy')}"></span></p>
+                    <p><strong>Total Vendido:</strong> <span th:text="${'R$ ' + #numbers.formatDecimal(total, 1, 2)}"></span></p>
+                </div>
+
+                <table class="tabela-produtos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data</th>
+                            <th>Cliente</th>
+                            <th>Itens</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="venda : ${vendas}">
+                            <td th:text="${venda.id}"></td>
+                            <td th:text="${#temporals.format(venda.data, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${venda.cliente.nome}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="item : ${venda.itens}" th:text="${item.quantidade + ' x ' + item.produto.nome}"></li>
+                                </ul>
+                            </td>
+                            <td th:text="${'R$ ' + #numbers.formatDecimal(venda.valorTotal, 1, 2)}"></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(vendas)}">
+                            <td colspan="5">Nenhuma venda encontrada no período.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="relatorio-resumo">
+                    <h3>Resumo</h3>
+                    <p><strong>Quantidade de Vendas:</strong> <span th:text="${#lists.size(vendas)}"></span></p>
+                    <p><strong>Valor Médio por Venda:</strong> <span th:text="${#lists.isEmpty(vendas) ? 'R$ 0,00' : 'R$ ' + #numbers.formatDecimal(total / #lists.size(vendas), 1, 2)}"></span></p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

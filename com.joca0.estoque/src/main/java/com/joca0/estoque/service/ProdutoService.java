@@ -11,7 +11,6 @@ import java.util.Optional;
 @Service
 public class ProdutoService {
 
-    private final Produto produto = new Produto();
     private final ProdutoRepository produtoRepository;
 
 

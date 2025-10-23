@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendas - Sistema de Gerenciamento</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/main.css}">
+    <link type="text/css" rel="stylesheet" th:href="@{/css/produtos.css}">
+    <script th:src="@{/js/vendas.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Sistema de Gerenciamento</h1>
+
+    <div class="itens-page">
+        <aside class="menu-lateral">
+            <div class="opcao">
+                <a th:href="@{/home}">
+                    <p>Voltar para o menu</p>
+                </a>
+            </div>
+            <div class="opcao">
+                <a href="#" onclick="showForm('add')">
+                    <p>Adicionar Venda</p>
+                </a>
+            </div>
+            <div class="opcao">
+                <a th:href="@{/relatorios}">
+                    <p>Relatórios</p>
+                </a>
+            </div>
+        </aside>
+
+        <section class="container-produtos">
+            <div id="lista-vendas">
+                <h2>Vendas Cadastradas</h2>
+                <table class="tabela-produtos">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Data</th>
+                            <th>Itens</th>
+                            <th>Valor total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="venda : ${vendas}">
+                            <td th:text="${venda.id}"></td>
+                            <td th:text="${venda.cliente.nome}"></td>
+                            <td th:text="${#temporals.format(venda.data, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="item : ${venda.itens}" th:text="${item.quantidade + ' x ' + item.produto.nome}"></li>
+                                </ul>
+                            </td>
+                            <td th:text="${'R$ ' + #numbers.formatDecimal(venda.valorTotal, 1, 2)}"></td>
+                            <td>
+                                <button onclick="editarVenda(this.parentNode.parentNode)">Editar</button>
+                                <button onclick="deletarVenda(this.parentNode.parentNode.cells[0].innerText)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(vendas)}">
+                            <td colspan="6">Nenhuma venda encontrada.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="form-venda" style="display: none;">
+                <h2 id="form-title">Adicionar Venda</h2>
+                <form id="venda-form">
+                    <input type="hidden" id="venda-id">
+                    <div class="form-group">
+                        <label for="venda-cliente">Cliente:</label>
+                        <select id="venda-cliente" required>
+                            <option value="">Selecione um cliente</option>
+                            <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Itens:</label>
+                        <div id="itens-container">
+                            <div class="item-row">
+                                <select class="item-produto" required>
+                                    <option value="">Selecione um produto</option>
+                                    <option th:each="produto : ${produtos}" th:value="${produto.id}" th:text="${produto.nome}" th:data-preco="${produto.preco}"></option>
+                                </select>
+                                <input type="number" class="item-quantidade" min="1" value="1" required>
+                                <span class="item-subtotal">R$ 0,00</span>
+                                <button type="button" class="remove-item">Remover</button>
+                            </div>
+                        </div>
+                        <button type="button" id="add-item">Adicionar Item</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="venda-valorTotal">Valor Total:</label>
+                        <input type="text" id="venda-valorTotal" readonly>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" onclick="cancelarForm()">Cancelar</button>
+                        <button type="button" id="save-button" onclick="salvarVenda()">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>
